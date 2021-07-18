@@ -1,3 +1,79 @@
 * Docker
+** Installing on Ubuntu
+snap install docker
+snap info docker
 ** Getting Started by Docker
 https://docs.docker.com/get-started/
+** Commands
+*** Working with Containers
+Start a container
+#+BEGIN_SRC bash
+docker start 3b2e7f1f792b
+#+END_SRC
+
+where 3b2e7f1f792b is CONTAINER-ID
+
+List all running containers
+#+BEGIN_SRC bash
+docker ps
+#+END_SRC
+
+List all containers
+#+BEGIN_SRC bash
+docker ps -a
+#+END_SRC
+
+List all Containers
+#+BEGIN_SRC bash
+docker container ls -a
+#+END_SRC
+
+Running in Detached (-d) Mode
+#+BEGIN_SRC bash
+docker container run -d --name mongo mongo
+#+END_SRC
+
+See logs of Container
+#+BEGIN_SRC bash
+docker container logs mongo
+#+END_SRC
+
+Stop Container
+#+BEGIN_SRC bash
+docker container stop mongo
+#+END_SRC
+
+Remove a Container
+#+BEGIN_SRC bash
+docker container rm mongo
+#+END_SRC
+
+Remove running Container
+#+BEGIN_SRC bash
+docker container rm -f mongo
+#+END_SRC
+
+Publish (-p) a Service (1): Service hört auf 8081 extern und auf 27017
+intern.
+#+BEGIN_SRC bash
+docker container run -d --name mongo -p 8081:27017 mongo
+#+END_SRC
+
+Attach to the container again
+#+BEGIN_SRC bash
+sudo docker attach 51
+#+END_SRC
+
+where 51 is the beginning of the container-id of the container we want
+to attach to.
+
+Publish (-p) a Service (2): Auf diese Weise wählt Docker, mit welchem
+Port ein Service publiziert wird.
+#+BEGIN_SRC bash
+docker container run -d --name mongo -p 27017 mongo
+#+END_SRC
+
+Inspect a Container
+#+BEGIN_SRC bash
+docker container inspect mongo
+#+END_SRC
