@@ -2,8 +2,88 @@
 ** Installing on Ubuntu
 snap install docker
 snap info docker
-** Getting Started by Docker
+** Getting Started
+*** Getting Started by Docker
 https://docs.docker.com/get-started/
+*** Hello Django
+**** Image und Container erstellen
+#+BEGIN_SRC
+cd ~/004-Docker
+mkdir Hello-Django
+touch Dockerfile
+touch requirements.txt
+touch docker-compose.yml
+#+END_SRC
+
+Dockerfile:
+#+BEGIN_SRC
+FROM python:3.8-alpine
+
+ENV PYTHONUNBUFFERED 1
+
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+RUN mkdir /app
+WORKDIR /app
+
+RUN adduser -D shb
+RUN chown shb:shb -R /app/
+RUN chmod +x /app
+USER shb
+#+END_SRC
+
+requirements.txt:
+#+BEGIN_SRC
+django == 2.2.17
+django-extensions == 3.0.2
+#+END_SRC
+
+docker-compose.yml:
+#+BEGIN_SRC
+version: "3"
+
+services:
+    app:
+        build:
+            context: .
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./app:/app
+        command: >
+            sh -c "python manage.py runserver 0.0.0.0:8000"
+#+END_SRC
+
+#+BEGIN_SRC
+sudo docker build -t hello-django .
+mkdir app
+sudo docker run --rm -v "${PWD}:/app" hello-django django-admin startproject demo app
+sudo docker run --rm -v "${PWD}:/app" -e DJANGO_MANAGEMENT_JOB=makemigrations hello-django
+sudo docker-compose up
+curl localhost:8000 | grep "The install worked successfully! Congratulations!"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 16348  100 16348    0     0   498k      0 --:--:-- --:--:-- --:--:--  514k
+        <h2>The install worked successfully! Congratulations!</h2>
+#+END_SRC
+
+Es gibt nun einen Container hello-django_app
+#+BEGIN_SRC
+sudo docker container ls -a
+#+END_SRC
+
+Es gibt nun ein Image hello-django
+#+BEGIN_SRC
+sudo docker image ls
+#+END_SRC
+
+So ist es.
+**** Container ausführen
+#+BEGIN_SRC bash
+cd /home/shb/004-Docker/Hello-Django
+sudo docker-compose up
+#+END_SRC
 ** Commands
 *** Working with Containers
 Start a container
@@ -76,4 +156,36 @@ docker container run -d --name mongo -p 27017 mongo
 Inspect a Container
 #+BEGIN_SRC bash
 docker container inspect mongo
+#+END_SRC
+*** Working with Images
+List images
+#+BEGIN_SRC bash
+sudo docker image ls
+#+END_SRC
+
+Build an Image: Kommando unten schaut sich Dockerfile im Current
+Working Directory an und erstellt auf Basis dieses Dockerfiles ein
+Image.
+#+BEGIN_SRC bash
+sudo docker image build -t my-name:my-tag .
+#+END_SRC
+
+Pull from Docker-Hub
+#+BEGIN_SRC bash
+sudo docker pull debian:10-slim
+#+END_SRC
+
+Remove Image
+#+BEGIN_SRC bash
+sudo docker image rm 18e588cc27a6
+#+END_SRC
+
+Remove Image (shorthand)
+#+BEGIN_SRC bash
+sudo docker rmi 18e588cc27a6
+#+END_SRC
+
+Remove all dangling images
+#+BEGIN_SRC bash
+sudo docker image prune
 #+END_SRC
