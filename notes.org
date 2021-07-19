@@ -189,3 +189,80 @@ Remove all dangling images
 #+BEGIN_SRC bash
 sudo docker image prune
 #+END_SRC
+* Kryptographie und Sicherheit
+** WAF (Web Application Firewall)
+** PKI (Public Key Infrastructure)
+- Über die PKI können öffentliche Schlüssel verteilt werden.
+*** X.509
+- X.509 ist ein Format für Zertifikate
+*** Public Key / Private Key
+- Ein Public Key kann verwendet werden, um jemanden eine
+  verschlüsselte Nachricht zu senden. Nur der Empfänger kennt den
+  Private Key, mit welchem die verschlüsselte Nachricht wieder
+  entschlüsselt werden kann.
+- Der Public Key wird mit dem Private Key erstellt.
+*** CRL (Certificate Revocation List)
+- CA erstellt die CRL.
+- Auf der CRL kann man gucken, ob ein Zertifikat, welches man
+  beispielsweise von "boeser.ch" erhalten hat, gültig ist.
+- Zertifikate können geklaut werden. In einem solchen Falle ist es
+  wichtig, dass informiert werden kann, dass das "geklaute" Zertifikat
+  nicht mehr gültig ist.
+*** CA (Certificate Authority)
+- CA stellt sicher, dass ein Zertifikat "boeser.ch" tatsächlich an den
+  Eigentümer von "boeser.ch" vergeben wurde.
+- CA bestätigt die Identität eines Public Keys indem sie diesen mit
+  ihrem Private Key signiert.
+** Steganography
+- Beispielsweise hinterlegen einer geheimen Nachricht in einem Bild.
+- Steganography wird auch Banknoten verwendet, um diese vor Fälschung
+  zu schützen.
+** Key Escrow
+- Im Key Escrow werden private und geheime Schlüssel hinterlegt, damit
+  diese im Desaster-Fall nicht verloren gehen.
+** Hashing
+- Hashing ist eine Funktion, welche einen Text in einen Text fixer
+  Länge überführt.
+- Mittels Hashing kann überprüft werden ob ein Text verändert wurde.
+- Im Kontext des Hashings bedeutet eine Kollision, dass zwei
+  verschiedene Texte denselben Hash-Wert haben.
+** Non-repudiation
+- Non-repudiation ermöglicht zwei Dinge: Erstens hat der Sender
+  Gewähr, dass seine Nachricht beim Empfänger eingetroffen
+  ist. Zweitens hat der Empfänger Gewähr, dass die Nachricht
+  tatsächlich vom Sender stammt.
+** Symmetrische und Asymetrische Verschlüsselung
+- Bei der symmetrischen Verschlüsselung wird zum Verschlüsseln und
+  Entschlüsseln ein Schlüssel verwendet.
+- Zum Zeitpunkt, wo diese Zeilen hier geschrieben werden
+  (19. Juli 2021) wird ein symmetrischer Schlüssel mit einer Länge von
+  128 Bit als sicher betrachtet.
+- Bei der asymmetrischen Verschlüsselung gibt es zwei Schlüssel. Einen
+  öffentlichen und einen privaten. Mit dem öffentlichen Schlüssel wird
+  verschlüsselt, mit dem privaten Schlüssel wird entschlüsselt.
+- Das Pendant zu einem symmetrischen 128-Bit-Schlüssel in Bezug auf
+  Sicherheit ist ein asymmetrischer 3248-Bit-Schlüssel.
+** Block- und Stream-Verschlüsselung
+- Bei der Block-Verschlüsselung werden Blöcke z.B. à 64-bit verschlüsselt.
+- Bei der Stream-Verschlüsselung wird 'Bit by Bit' verschlüsselt.
+** Transport-Verschlüsselung
+*** VPN
+*** TLS
+- In einem gewsissen Sinne kann ein TLS-Zertifikat als Public Key und
+  der TLS-Key als Private Key betrachtet werden.
+- Um das TLS-Zertifikat von boeser.ch zu prüfen, vergleicht man die
+  Signatur des TLS-Zertifikates mit der lokalen Signatur vom
+  entsprechenden CA.
+- Das TLS-Zertifikat eines Host wird vom Client verwendet, um
+  verschlüsselte Nachrichten an den Host zu senden. Insbesondere
+  werden auf diese Weise verschlüsselte Nachrichten ausgetauscht, um
+  sich auf einen symmetrischen Schlüssel für die TLS-Session zu
+  einigen.
+- Ein Host hält eine Liste von Chiffrierungsverfahren (Ciphers)
+  vor. Der Klient schaut sich die angeboten Chiffrierungsverfahren an
+  und wählt dann eines für die Kommunikation mit dem Host aus.
+*** SSH
+*** S/MIME
+** Literatur
+- [[https://learning.oreilly.com/library/view/comptia-r-security-rapid/9780735668478/][CompTIA Security+ Rapid Review]]
+- [[https://learning.oreilly.com/library/view/linux-hardening-in/9780134173337][Linux Hardening in Hostile Networks: Server Security from TLS to Tor]]
