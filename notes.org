@@ -193,6 +193,56 @@ sudo docker image prune
 ** Debugging Lisp Programs
 *** Documentation
 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Debugging.html][Debugging Lisp Programs]]
+* Unix Cheat Sheet
+** Getting Help
+Filter: Nur Kommandos aus Abschnitt 8 und mit Schlüsselwort 'create'.
+#+BEGIN_SRC bash
+man -k user | grep 8 | grep create
+#+END_SRC
+
+Zeige Hilfe zu einem Kommando
+#+BEGIN_SRC bash
+ls --help
+#+END_SRC
+
+Der Ordner '/usr/share/doc'.
+#+BEGIN_SRC bash
+ls /usr/share/doc | grep emacs
+#+END_SRC
+** Command Line Cheat Sheet
+Zeige Information zu 'home' und nicht den Inhalt von 'home':
+#+BEGIN_SRC bash
+ls -ld /home
+#+END_SRC
+
+Jüngste/r Datei/Ordner zuerst(zuletzt)
+#+BEGIN_SRC bash
+ls -lt
+ls -lrt
+#+END_SRC
+
+#+BEGIN_SRC bash
+#+END_SRC
+* Network
+** Modelle
+*** TCP/IP Netzerk Modell
+<<TCP-Network-Model>>
+
+Dieses Modell kennt
+
+- Link Layer / Network Access Layer
+- Internet Layer
+- Transport Layer
+- Application Layer
+*** OSI Netzwerk Modell
+<<OSI-Network-Model>>
+
+Dieses Modell hat 7 Schichten: Layer 1 - Physical Layer, Layer 2 -
+Data Link Layer, Layer 3 - Network Layer, Layer 4 - Transport Layer,
+Layer 5 - Session Layer, Layer 6 - Presentation Layer, Layer 7 -
+Application Layer
+** Literatur
+- [[https://learning.oreilly.com/library/view/sams-teach-yourself/9780134598598][Sams Teach Yourself TCP/IP in 24 Hours]]
 * Kryptographie und Sicherheit
 ** WAF (Web Application Firewall)
 ** PKI (Public Key Infrastructure)
@@ -252,6 +302,10 @@ sudo docker image prune
 ** Transport-Verschlüsselung
 *** VPN
 *** TLS
+Der Verbindungsaufbau findet im [[OSI-Network-Model]] in Layer 5
+statt. Nach dem Verbindungsaufbau findet TLS in Layer 6 statt. Im
+[[TCP-Network-Model]] ist TLS im Application Layer umgesetzt.
+**** Grundlegendes
 - In einem gewsissen Sinne kann ein TLS-Zertifikat als Public Key und
   der TLS-Key als Private Key betrachtet werden.
 - Um das TLS-Zertifikat von boeser.ch zu prüfen, vergleicht man die
@@ -265,8 +319,34 @@ sudo docker image prune
 - Ein Host hält eine Liste von Chiffrierungsverfahren (Ciphers)
   vor. Der Klient schaut sich die angeboten Chiffrierungsverfahren an
   und wählt dann eines für die Kommunikation mit dem Host aus.
+**** Ciphers
+Ein Ciphersuite besteht aus vier Komponenten:
+
+- Key Exchange
+- Authentication
+- Bulk Encryption
+- Message Authenticity
+
+Gegeben der Cipher Suite
+#+BEGIN_SRC bash
+ECDHE-ECDSA-AES128-GCM-SHA256
+#+END_SRC
+
+bedeutet verwende
+
+- ECDHE für 'Key Exchange'
+- ECDSA für 'Authentication'
+- AES128-GCM für 'Bulk Encryption'
+- SHA256 für 'Message Authenticity'
 *** SSH
 *** S/MIME
+** Ressources
+Auf [[https://wiki.mozilla.org/Security/Server_Side_TLS][Server Side TLS]] stellt Mozilla Material bereit, welche den
+Systemadministrator beim 'Hardening' eines Webservices unterstützen.
+
+Auf [[https://www.ssllabs.com][SSL Labs]] gibt es ein Tool, wo man seinen Webserver prüfen lassen
+kann.
 ** Literatur
 - [[https://learning.oreilly.com/library/view/comptia-r-security-rapid/9780735668478/][CompTIA Security+ Rapid Review]]
 - [[https://learning.oreilly.com/library/view/linux-hardening-in/9780134173337][Linux Hardening in Hostile Networks: Server Security from TLS to Tor]]
+- [[https://learning.oreilly.com/library/view/zero-trust-networks/9781491962183/][Zero Trust Networks]]
