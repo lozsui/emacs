@@ -189,6 +189,10 @@ Remove all dangling images
 #+BEGIN_SRC bash
 sudo docker image prune
 #+END_SRC
+* emacs
+** Debugging Lisp Programs
+*** Documentation
+[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Debugging.html][Debugging Lisp Programs]]
 * Kryptographie und Sicherheit
 ** WAF (Web Application Firewall)
 ** PKI (Public Key Infrastructure)
