@@ -241,6 +241,56 @@ Dieses Modell hat 7 Schichten: Layer 1 - Physical Layer, Layer 2 -
 Data Link Layer, Layer 3 - Network Layer, Layer 4 - Transport Layer,
 Layer 5 - Session Layer, Layer 6 - Presentation Layer, Layer 7 -
 Application Layer
+** Router
+- Der Router ist ein Knoten, welcher zwei Netze miteinander
+  verbindet. Vermutlich kann ein Router sogar mehrere Netze miteiander
+  verbinden.
+** Port
+- Über einen Port kann festgelegt werden, welche Anwendung sich um
+  welche Packete kümmern sollen.
+** Network Mgmt Utilities
+*** netstat
+Mit netstat kann man sich Netzwerkverbindungen anzeigen lassen.
+*** route
+Mit 'route -v' kann man sich die Routen eines Systems anzeigen lassen.
+*** traceroute
+Mit traceroute kann man gucken, welcher Weg ein Packet zum Zielhost
+beschreitet.
+#+BEGIN_SRC bash
+traceroute -m 15 --resolve-hostnames 8.8.8.8
+traceroute to 8.8.8.8 (8.8.8.8), 15 hops max
+  1   192.168.178.1 (192.168.178.1)  0.725ms  0.379ms  0.333ms 
+  2   145.40.192.2 (2.192.40.145.ftth.as8758.net)  1.642ms  1.308ms  1.174ms 
+  3   212.25.27.120 (212.25.27.120)  1.772ms  1.694ms  1.412ms 
+  4   212.25.28.235 (gwen.glb.as8758.net)  2.081ms  1.612ms  1.556ms 
+  5   72.14.198.50 (72.14.198.50)  1.193ms  0.985ms  0.851ms 
+  6   74.125.243.161 (74.125.243.161)  3.150ms  2.669ms  2.792ms 
+  7   172.253.50.23 (172.253.50.23)  2.820ms  2.269ms  2.133ms 
+  8   8.8.8.8 (dns.google)  1.848ms  1.547ms  1.557ms
+#+END_SRC
+*** nslookup
+- Mit nslookup findet man heraus, dass boeser.ch unter der IP-Adresse
+  85.119.82.189 gefunden wird.
+- Als Nebeneffekt findet man heraus, wer als Name-Server konfiguriert
+  ist.
+*** arp
+#+BEGIN_SRC bash
+root@host:~# arp -a
+my_router (192.168.178.1) at 2c:3a:fd:1f:48:9f [ether] on eno1
+#+END_SRC
+
+'2c:3a:fd:1f:48:9f' is probably the mac address of my router.
+*** ip
+#+BEGIN_SRC bash
+ip address
+ip route
+#+END_SRC
+
+Ein Interface ein- und ausschalten.
+#+BEGIN_SRC bash
+sudo ip link set eno1 down
+sudo ip link set eno1 up
+#+END_SRC
 ** Literatur
 - [[https://learning.oreilly.com/library/view/sams-teach-yourself/9780134598598][Sams Teach Yourself TCP/IP in 24 Hours]]
 * Kryptographie und Sicherheit
