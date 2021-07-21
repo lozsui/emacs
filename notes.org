@@ -3,5 +3,404 @@
 *** Spring Boot in 100 Steps
 - [[https://github.com/in28minutes/spring-boot-master-class][Course Material]]
 * Docker
-** Getting Started by Docker
+** Installing on Ubuntu
+snap install docker
+snap info docker
+** Getting Started
+*** Getting Started by Docker
 https://docs.docker.com/get-started/
+*** Hello Django
+**** Image und Container erstellen
+#+BEGIN_SRC
+cd ~/004-Docker
+mkdir Hello-Django
+touch Dockerfile
+touch requirements.txt
+touch docker-compose.yml
+#+END_SRC
+
+Dockerfile:
+#+BEGIN_SRC
+FROM python:3.8-alpine
+
+ENV PYTHONUNBUFFERED 1
+
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+RUN mkdir /app
+WORKDIR /app
+
+RUN adduser -D shb
+RUN chown shb:shb -R /app/
+RUN chmod +x /app
+USER shb
+#+END_SRC
+
+requirements.txt:
+#+BEGIN_SRC
+django == 2.2.17
+django-extensions == 3.0.2
+#+END_SRC
+
+docker-compose.yml:
+#+BEGIN_SRC
+version: "3"
+
+services:
+    app:
+        build:
+            context: .
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./app:/app
+        command: >
+            sh -c "python manage.py runserver 0.0.0.0:8000"
+#+END_SRC
+
+#+BEGIN_SRC
+sudo docker build -t hello-django .
+mkdir app
+sudo docker run --rm -v "${PWD}:/app" hello-django django-admin startproject demo app
+sudo docker run --rm -v "${PWD}:/app" -e DJANGO_MANAGEMENT_JOB=makemigrations hello-django
+sudo docker-compose up
+curl localhost:8000 | grep "The install worked successfully! Congratulations!"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 16348  100 16348    0     0   498k      0 --:--:-- --:--:-- --:--:--  514k
+        <h2>The install worked successfully! Congratulations!</h2>
+#+END_SRC
+
+Es gibt nun einen Container hello-django_app
+#+BEGIN_SRC
+sudo docker container ls -a
+#+END_SRC
+
+Es gibt nun ein Image hello-django
+#+BEGIN_SRC
+sudo docker image ls
+#+END_SRC
+
+So ist es.
+**** Container ausführen
+#+BEGIN_SRC bash
+cd /home/shb/004-Docker/Hello-Django
+sudo docker-compose up
+#+END_SRC
+** Commands
+*** Working with Containers
+Start a container
+#+BEGIN_SRC bash
+docker start 3b2e7f1f792b
+#+END_SRC
+
+where 3b2e7f1f792b is CONTAINER-ID
+
+List all running containers
+#+BEGIN_SRC bash
+docker ps
+#+END_SRC
+
+List all containers
+#+BEGIN_SRC bash
+docker ps -a
+#+END_SRC
+
+List all Containers
+#+BEGIN_SRC bash
+docker container ls -a
+#+END_SRC
+
+Running in Detached (-d) Mode
+#+BEGIN_SRC bash
+docker container run -d --name mongo mongo
+#+END_SRC
+
+See logs of Container
+#+BEGIN_SRC bash
+docker container logs mongo
+#+END_SRC
+
+Stop Container
+#+BEGIN_SRC bash
+docker container stop mongo
+#+END_SRC
+
+Remove a Container
+#+BEGIN_SRC bash
+docker container rm mongo
+#+END_SRC
+
+Remove running Container
+#+BEGIN_SRC bash
+docker container rm -f mongo
+#+END_SRC
+
+Publish (-p) a Service (1): Service hört auf 8081 extern und auf 27017
+intern.
+#+BEGIN_SRC bash
+docker container run -d --name mongo -p 8081:27017 mongo
+#+END_SRC
+
+Attach to the container again
+#+BEGIN_SRC bash
+sudo docker attach 51
+#+END_SRC
+
+where 51 is the beginning of the container-id of the container we want
+to attach to.
+
+Publish (-p) a Service (2): Auf diese Weise wählt Docker, mit welchem
+Port ein Service publiziert wird.
+#+BEGIN_SRC bash
+docker container run -d --name mongo -p 27017 mongo
+#+END_SRC
+
+Inspect a Container
+#+BEGIN_SRC bash
+docker container inspect mongo
+#+END_SRC
+*** Working with Images
+List images
+#+BEGIN_SRC bash
+sudo docker image ls
+#+END_SRC
+
+Build an Image: Kommando unten schaut sich Dockerfile im Current
+Working Directory an und erstellt auf Basis dieses Dockerfiles ein
+Image.
+#+BEGIN_SRC bash
+sudo docker image build -t my-name:my-tag .
+#+END_SRC
+
+Pull from Docker-Hub
+#+BEGIN_SRC bash
+sudo docker pull debian:10-slim
+#+END_SRC
+
+Remove Image
+#+BEGIN_SRC bash
+sudo docker image rm 18e588cc27a6
+#+END_SRC
+
+Remove Image (shorthand)
+#+BEGIN_SRC bash
+sudo docker rmi 18e588cc27a6
+#+END_SRC
+
+Remove all dangling images
+#+BEGIN_SRC bash
+sudo docker image prune
+#+END_SRC
+* emacs
+** Debugging Lisp Programs
+*** Documentation
+[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Debugging.html][Debugging Lisp Programs]]
+* Unix Cheat Sheet
+** Getting Help
+Filter: Nur Kommandos aus Abschnitt 8 und mit Schlüsselwort 'create'.
+#+BEGIN_SRC bash
+man -k user | grep 8 | grep create
+#+END_SRC
+
+Zeige Hilfe zu einem Kommando
+#+BEGIN_SRC bash
+ls --help
+#+END_SRC
+
+Der Ordner '/usr/share/doc'.
+#+BEGIN_SRC bash
+ls /usr/share/doc | grep emacs
+#+END_SRC
+** Command Line Cheat Sheet
+Zeige Information zu 'home' und nicht den Inhalt von 'home':
+#+BEGIN_SRC bash
+ls -ld /home
+#+END_SRC
+
+Jüngste/r Datei/Ordner zuerst(zuletzt)
+#+BEGIN_SRC bash
+ls -lt
+ls -lrt
+#+END_SRC
+
+#+BEGIN_SRC bash
+#+END_SRC
+* Network
+** Modelle
+*** TCP/IP Netzerk Modell
+<<TCP-Network-Model>>
+
+Dieses Modell kennt
+
+- Link Layer / Network Access Layer
+- Internet Layer
+- Transport Layer
+- Application Layer
+*** OSI Netzwerk Modell
+<<OSI-Network-Model>>
+
+Dieses Modell hat 7 Schichten: Layer 1 - Physical Layer, Layer 2 -
+Data Link Layer, Layer 3 - Network Layer, Layer 4 - Transport Layer,
+Layer 5 - Session Layer, Layer 6 - Presentation Layer, Layer 7 -
+Application Layer
+** Router
+- Der Router ist ein Knoten, welcher zwei Netze miteinander
+  verbindet. Vermutlich kann ein Router sogar mehrere Netze miteiander
+  verbinden.
+** Port
+- Über einen Port kann festgelegt werden, welche Anwendung sich um
+  welche Packete kümmern sollen.
+** Network Mgmt Utilities
+*** netstat
+Mit netstat kann man sich Netzwerkverbindungen anzeigen lassen.
+*** route
+Mit 'route -v' kann man sich die Routen eines Systems anzeigen lassen.
+*** traceroute
+Mit traceroute kann man gucken, welcher Weg ein Packet zum Zielhost
+beschreitet.
+#+BEGIN_SRC bash
+traceroute -m 15 --resolve-hostnames 8.8.8.8
+traceroute to 8.8.8.8 (8.8.8.8), 15 hops max
+  1   192.168.178.1 (192.168.178.1)  0.725ms  0.379ms  0.333ms 
+  2   145.40.192.2 (2.192.40.145.ftth.as8758.net)  1.642ms  1.308ms  1.174ms 
+  3   212.25.27.120 (212.25.27.120)  1.772ms  1.694ms  1.412ms 
+  4   212.25.28.235 (gwen.glb.as8758.net)  2.081ms  1.612ms  1.556ms 
+  5   72.14.198.50 (72.14.198.50)  1.193ms  0.985ms  0.851ms 
+  6   74.125.243.161 (74.125.243.161)  3.150ms  2.669ms  2.792ms 
+  7   172.253.50.23 (172.253.50.23)  2.820ms  2.269ms  2.133ms 
+  8   8.8.8.8 (dns.google)  1.848ms  1.547ms  1.557ms
+#+END_SRC
+*** nslookup
+- Mit nslookup findet man heraus, dass boeser.ch unter der IP-Adresse
+  85.119.82.189 gefunden wird.
+- Als Nebeneffekt findet man heraus, wer als Name-Server konfiguriert
+  ist.
+*** arp
+#+BEGIN_SRC bash
+root@host:~# arp -a
+my_router (192.168.178.1) at 2c:3a:fd:1f:48:9f [ether] on eno1
+#+END_SRC
+
+'2c:3a:fd:1f:48:9f' is probably the mac address of my router.
+*** ip
+#+BEGIN_SRC bash
+ip address
+ip route
+#+END_SRC
+
+Ein Interface ein- und ausschalten.
+#+BEGIN_SRC bash
+sudo ip link set eno1 down
+sudo ip link set eno1 up
+#+END_SRC
+** Literatur
+- [[https://learning.oreilly.com/library/view/sams-teach-yourself/9780134598598][Sams Teach Yourself TCP/IP in 24 Hours]]
+* Kryptographie und Sicherheit
+** WAF (Web Application Firewall)
+** PKI (Public Key Infrastructure)
+- Über die PKI können öffentliche Schlüssel verteilt werden.
+*** X.509
+- X.509 ist ein Format für Zertifikate
+*** Public Key / Private Key
+- Ein Public Key kann verwendet werden, um jemanden eine
+  verschlüsselte Nachricht zu senden. Nur der Empfänger kennt den
+  Private Key, mit welchem die verschlüsselte Nachricht wieder
+  entschlüsselt werden kann.
+- Der Public Key wird mit dem Private Key erstellt.
+*** CRL (Certificate Revocation List)
+- CA erstellt die CRL.
+- Auf der CRL kann man gucken, ob ein Zertifikat, welches man
+  beispielsweise von "boeser.ch" erhalten hat, gültig ist.
+- Zertifikate können geklaut werden. In einem solchen Falle ist es
+  wichtig, dass informiert werden kann, dass das "geklaute" Zertifikat
+  nicht mehr gültig ist.
+*** CA (Certificate Authority)
+- CA stellt sicher, dass ein Zertifikat "boeser.ch" tatsächlich an den
+  Eigentümer von "boeser.ch" vergeben wurde.
+- CA bestätigt die Identität eines Public Keys indem sie diesen mit
+  ihrem Private Key signiert.
+** Steganography
+- Beispielsweise hinterlegen einer geheimen Nachricht in einem Bild.
+- Steganography wird auch Banknoten verwendet, um diese vor Fälschung
+  zu schützen.
+** Key Escrow
+- Im Key Escrow werden private und geheime Schlüssel hinterlegt, damit
+  diese im Desaster-Fall nicht verloren gehen.
+** Hashing
+- Hashing ist eine Funktion, welche einen Text in einen Text fixer
+  Länge überführt.
+- Mittels Hashing kann überprüft werden ob ein Text verändert wurde.
+- Im Kontext des Hashings bedeutet eine Kollision, dass zwei
+  verschiedene Texte denselben Hash-Wert haben.
+** Non-repudiation
+- Non-repudiation ermöglicht zwei Dinge: Erstens hat der Sender
+  Gewähr, dass seine Nachricht beim Empfänger eingetroffen
+  ist. Zweitens hat der Empfänger Gewähr, dass die Nachricht
+  tatsächlich vom Sender stammt.
+** Symmetrische und Asymetrische Verschlüsselung
+- Bei der symmetrischen Verschlüsselung wird zum Verschlüsseln und
+  Entschlüsseln ein Schlüssel verwendet.
+- Zum Zeitpunkt, wo diese Zeilen hier geschrieben werden
+  (19. Juli 2021) wird ein symmetrischer Schlüssel mit einer Länge von
+  128 Bit als sicher betrachtet.
+- Bei der asymmetrischen Verschlüsselung gibt es zwei Schlüssel. Einen
+  öffentlichen und einen privaten. Mit dem öffentlichen Schlüssel wird
+  verschlüsselt, mit dem privaten Schlüssel wird entschlüsselt.
+- Das Pendant zu einem symmetrischen 128-Bit-Schlüssel in Bezug auf
+  Sicherheit ist ein asymmetrischer 3248-Bit-Schlüssel.
+** Block- und Stream-Verschlüsselung
+- Bei der Block-Verschlüsselung werden Blöcke z.B. à 64-bit verschlüsselt.
+- Bei der Stream-Verschlüsselung wird 'Bit by Bit' verschlüsselt.
+** Transport-Verschlüsselung
+*** VPN
+*** TLS
+Der Verbindungsaufbau findet im [[OSI-Network-Model]] in Layer 5
+statt. Nach dem Verbindungsaufbau findet TLS in Layer 6 statt. Im
+[[TCP-Network-Model]] ist TLS im Application Layer umgesetzt.
+**** Grundlegendes
+- In einem gewsissen Sinne kann ein TLS-Zertifikat als Public Key und
+  der TLS-Key als Private Key betrachtet werden.
+- Um das TLS-Zertifikat von boeser.ch zu prüfen, vergleicht man die
+  Signatur des TLS-Zertifikates mit der lokalen Signatur vom
+  entsprechenden CA.
+- Das TLS-Zertifikat eines Host wird vom Client verwendet, um
+  verschlüsselte Nachrichten an den Host zu senden. Insbesondere
+  werden auf diese Weise verschlüsselte Nachrichten ausgetauscht, um
+  sich auf einen symmetrischen Schlüssel für die TLS-Session zu
+  einigen.
+- Ein Host hält eine Liste von Chiffrierungsverfahren (Ciphers)
+  vor. Der Klient schaut sich die angeboten Chiffrierungsverfahren an
+  und wählt dann eines für die Kommunikation mit dem Host aus.
+**** Ciphers
+Ein Ciphersuite besteht aus vier Komponenten:
+
+- Key Exchange
+- Authentication
+- Bulk Encryption
+- Message Authenticity
+
+Gegeben der Cipher Suite
+#+BEGIN_SRC bash
+ECDHE-ECDSA-AES128-GCM-SHA256
+#+END_SRC
+
+bedeutet verwende
+
+- ECDHE für 'Key Exchange'
+- ECDSA für 'Authentication'
+- AES128-GCM für 'Bulk Encryption'
+- SHA256 für 'Message Authenticity'
+*** SSH
+*** S/MIME
+** Ressources
+Auf [[https://wiki.mozilla.org/Security/Server_Side_TLS][Server Side TLS]] stellt Mozilla Material bereit, welche den
+Systemadministrator beim 'Hardening' eines Webservices unterstützen.
+
+Auf [[https://www.ssllabs.com][SSL Labs]] gibt es ein Tool, wo man seinen Webserver prüfen lassen
+kann.
+** Literatur
+- [[https://learning.oreilly.com/library/view/comptia-r-security-rapid/9780735668478/][CompTIA Security+ Rapid Review]]
+- [[https://learning.oreilly.com/library/view/linux-hardening-in/9780134173337][Linux Hardening in Hostile Networks: Server Security from TLS to Tor]]
+- [[https://learning.oreilly.com/library/view/zero-trust-networks/9781491962183/][Zero Trust Networks]]
