@@ -1,7 +1,7 @@
 * Spring Boot
 ** Getting Started
 *** Spring Boot in 100 Steps
-- [[https://github.com/in28minutes/spring-boot-master-class][Course Material]]
+- [[https://github.com/in28minutes/spring-boot-master-class][Course Mater
 * Docker
 ** Installing on Ubuntu
 snap install docker
@@ -248,7 +248,7 @@ ls -lrt
 
 #+BEGIN_SRC bash
 #+END_SRC
-* Network
+* Network                                                            
 ** Modelle
 *** TCP/IP Netzerk Modell
 <<TCP-Network-Model>>
@@ -473,3 +473,11 @@ kann.
 - [[https://learning.oreilly.com/library/view/comptia-r-security-rapid/9780735668478/][CompTIA Security+ Rapid Review]]
 - [[https://learning.oreilly.com/library/view/linux-hardening-in/9780134173337][Linux Hardening in Hostile Networks: Server Security from TLS to Tor]]
 - [[https://learning.oreilly.com/library/view/zero-trust-networks/9781491962183/][Zero Trust Networks]]
+* Begriffe und Konzepte
+** Sticky Session                    :sticky_session:stateful:stateless:
+Das System, dass wir betrachten ist ein Webshop. Gegeben seien zwei
+Knoten: Kommerz-Knoten-1 und Kommerz-Knoten-2. Ein
+Sticky-Session-Setup des Webshops bedeutet nun, dass vom ersten bis
+zum letzen Request eines Shop-Benutzers alle Requests entweder über
+Kommerz-Knoten-1 oder Kommerz-Knoten-2 abgewickelt werden. Die beiden
+Knoten sind dann 'stateful'.
