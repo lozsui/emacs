@@ -273,6 +273,9 @@ Application Layer
 ** Port
 - Über einen Port kann festgelegt werden, welche Anwendung sich um
   welche Packete kümmern sollen.
+** IPv6
+- Eine IPv6-Adresse besteht aus 128 bits.
+- Ein Block in einer IPv6-Adresse besteht aus 16 Bits.
 ** Network Mgmt Utilities
 *** netstat
 Mit netstat kann man sich Netzwerkverbindungen anzeigen lassen.
@@ -316,8 +319,53 @@ Ein Interface ein- und ausschalten.
 sudo ip link set eno1 down
 sudo ip link set eno1 up
 #+END_SRC
+*** dig
+#+BEGIN_SRC bash
+sam@sh:~$ dig boeser.ch
+
+; <<>> DiG 9.16.1-Ubuntu <<>> boeser.ch
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13728
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;boeser.ch.			IN	A
+
+;; ANSWER SECTION:
+boeser.ch.		5817	IN	A	85.119.82.189
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53)
+;; WHEN: Tue Jul 27 09:58:05 CEST 2021
+;; MSG SIZE  rcvd: 54
+
+sam@sh:~$ dig -x 85.119.82.189
+
+; <<>> DiG 9.16.1-Ubuntu <<>> -x 85.119.82.189
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 22396
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;189.82.119.85.in-addr.arpa.	IN	PTR
+
+;; ANSWER SECTION:
+189.82.119.85.in-addr.arpa. 86400 IN	PTR	zurich.vps.bitfolk.com.
+
+;; Query time: 160 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53)
+;; WHEN: Tue Jul 27 10:00:32 CEST 2021
+;; MSG SIZE  rcvd: 91
+#+END_SRC
 ** Literatur
 - [[https://learning.oreilly.com/library/view/sams-teach-yourself/9780134598598][Sams Teach Yourself TCP/IP in 24 Hours]]
+- [[https://learning.oreilly.com/library/view/network-troubleshooting-tools/059600186X/][Network Troubleshooting Tools]]
 * Kryptographie und Sicherheit
 ** WAF (Web Application Firewall)
 ** PKI (Public Key Infrastructure)
