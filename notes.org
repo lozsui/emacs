@@ -200,6 +200,13 @@ sudo docker image prune
 ** lisp
 
 #+BEGIN_SRC lisp
+;;;; Gibt 3 zurück
+(let ((x 1)
+      (y 2))
+  (+ x y))
+#+END_SRC
+
+#+BEGIN_SRC lisp
 (defun insert-hello-world ()
   "Insert 'Hello World' at cursor point. \
    Put cursor back to original position."
@@ -218,6 +225,9 @@ sudo docker image prune
 
 #+BEGIN_SRC lisp
 #+END_SRC
+** Resources
+- C-h i m Elisp RET
+- https://github.com/chrisdone/elisp-guide
 * Unix Cheat Sheet
 ** Getting Help
 Filter: Nur Kommandos aus Abschnitt 8 und mit Schlüsselwort 'create'.
